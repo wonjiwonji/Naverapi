@@ -21,11 +21,18 @@ import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;
     private static NaverMap naverMap;
+
+    //마커 변수 선언 및 초기화
+    private Marker marker1 = new Marker();
+    private Marker marker2 = new Marker();
+    private Marker marker3 = new Marker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +45,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapView.getMapAsync(this);
     }
 
+    private void setMarker(Marker marker,  double lat, double lng, int resourceID, int zIndex, String text)
+    {
+        //마커 크기
+        marker.setWidth(marker.SIZE_AUTO);
+        marker.setHeight(marker.SIZE_AUTO);
+        //원근감 표시
+        marker.setIconPerspectiveEnabled(true);
+        //아이콘 지정
+        marker.setIcon(OverlayImage.fromResource(resourceID));
+        //마커의 투명도
+        marker.setAlpha(0.8f);
+        //마커 위치
+        marker.setPosition(new LatLng(lat, lng));
+        //마커 우선순위
+        marker.setZIndex(zIndex);
+        //마커 텍스트
+        marker.setCaptionText(text);
+        //마커 표시
+        marker.setMap(naverMap);
+    }
+
 
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
+
         this.naverMap = naverMap;
 
 //        naverMap.setLayerGroupEnabled(naverMap.LAYER_GROUP_BUILDING, true);
@@ -51,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 17   //줌 레벨
         );
         naverMap.setCameraPosition(cameraPosition);
+
+        //마커 지정
+        setMarker(marker1, 37.434412970034, 127.08084512504904, R.drawable.marker, 0, "마커1");
+        setMarker(marker2, 37.434512970034, 127.08084512504904, R.drawable.marker_blue, 0, "마커2");
+        setMarker(marker3, 37.434612970034, 127.08084512504904, R.drawable.marker, 0, "마커3");
 
     }
 
